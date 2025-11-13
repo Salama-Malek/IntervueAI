@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClientProvider } from '@tanstack/react-query';
 import App from './App.tsx';
+import './styles/critical.css';
+import './styles/design-tokens.css';
 import './index.css';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { queryClient } from './lib/queryClient.ts';

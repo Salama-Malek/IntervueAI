@@ -1,0 +1,75 @@
+:root {
+  /* Colors */
+  --ink-1000: #010104;
+  --ink-950: #020202;
+  --ink-900: #05010a;
+  --ink-800: #0f172a;
+  --ink-700: #1e293b;
+  --frost-100: #f8fbff;
+  --frost-200: #e2e8ff;
+  --accent-indigo: #6d28d9;
+  --accent-violet: #a855f7;
+  --accent-fuchsia: #ec4899;
+  --accent-cyan: #38bdf8;
+  --accent-emerald: #10b981;
+  --accent-amber: #facc15;
+  --accent-rose: #f43f5e;
+  --accent-orange: #f97316;
+  --accent-slate: #94a3b8;
+  --glass-light: rgba(255, 255, 255, 0.08);
+  --glass-dark: rgba(2, 2, 2, 0.65);
+  --border-soft: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --success: #22c55e;
+  --warning: #fbbf24;
+  --danger: #ef4444;
+
+  /* Typography */
+  --font-display: 'Space Grotesk', 'Inter', 'Segoe UI', sans-serif;
+  --font-body: 'Space Grotesk', 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Roboto Mono', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 2.5rem;
+  --line-tight: 1.1;
+  --line-snug: 1.25;
+  --line-normal: 1.5;
+  --letter-eyebrow: 0.35em;
+  --letter-cta: 0.2em;
+
+  /* Spacing */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Radii */
+  --radius-pill: 9999px;
+  --radius-full: 999px;
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+
+  /* Elevation */
+  --shadow-glass-low: 0 12px 30px rgba(3, 7, 18, 0.45);
+  --shadow-glass-mid: 0 20px 50px rgba(3, 7, 18, 0.55);
+  --shadow-glass-high: 0 35px 90px rgba(3, 7, 18, 0.7);
+  --shadow-badge: 0 0 25px rgba(56, 189, 248, 0.35);
+  --shadow-cta: 0 10px 30px rgba(16, 185, 129, 0.35);
+
+  /* Motion */
+  --motion-fast: 150ms;
+  --motion-base: 220ms;
+  --motion-slow: 350ms;
+  --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-ease-emphasis: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
