@@ -1,0 +1,73 @@
+{
+    "branch":  "redesign/interviewai-senior-refactor-20251113",
+    "commits":  [
+                    {
+                        "msg":  "chore: integrate design tokens + critical css",
+                        "files":  [
+                                      "src/main.tsx",
+                                      "src/styles/design-tokens.css"
+                                  ]
+                    },
+                    {
+                        "msg":  "feat(ui): wire design-system Header/LeftNav/KPICard/PrimaryButton",
+                        "files":  [
+                                      "src/components/AppShell.tsx",
+                                      "src/components/ControlsBar.tsx"
+                                  ]
+                    },
+                    {
+                        "msg":  "feat(ui): replace Session DNA markup with InterviewConfigPanel",
+                        "files":  [
+                                      "src/components/AppShell.tsx",
+                                      "src/components/InterviewConfigPanel.tsx"
+                                  ]
+                    },
+                    {
+                        "msg":  "fix(a11y): resolve dialog, transcript, and mock typings",
+                        "files":  [
+                                      "src/components/Dialog.tsx",
+                                      "src/components/MicGateIndicator.tsx",
+                                      "src/components/SessionViewerModal.tsx",
+                                      "src/components/TranscriptList.tsx",
+                                      "src/setupTests.ts"
+                                  ]
+                    },
+                    {
+                        "msg":  "perf: lazy-load session modal and preconnect fonts",
+                        "files":  [
+                                      "index.html",
+                                      "src/components/AppShell.tsx"
+                                  ]
+                    },
+                    {
+                        "msg":  "test: refresh accessibility snapshots and bootstrap entry",
+                        "files":  [
+                                      "src/components/__tests__/__snapshots__/accessibility.test.tsx.snap",
+                                      "src/components/AppShell.tsx",
+                                      "src/main.tsx"
+                                  ]
+                    },
+                    {
+                        "msg":  "docs: refresh PR summary and commit log",
+                        "files":  [
+                                      "PR_redesign_description.md",
+                                      "design-redesign-commit-log.md"
+                                  ]
+                    }
+                ],
+    "tests":  {
+                  "failures":  [
+
+                               ],
+                  "passed":  true
+              },
+    "build":  {
+                  "errors":  [
+
+                             ],
+                  "success":  true
+              },
+    "notes":  [
+                  "npm ci required terminating stale node/esbuild processes before reinstalling dependencies."
+              ]
+}
