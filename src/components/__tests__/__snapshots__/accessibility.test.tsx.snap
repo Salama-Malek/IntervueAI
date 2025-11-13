@@ -1,0 +1,120 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`accessibility snapshots > renders footer with contact links + roles 1`] = `
+<div>
+  <footer
+    class="mx-auto w-full max-w-7xl rounded-3xl border border-white/10 bg-slate-950/60 px-6 py-8 text-white shadow-[0_25px_60px_rgba(3,7,18,0.65)] backdrop-blur-2xl sm:px-10"
+  >
+    <div
+      class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"
+    >
+      <div>
+        <p
+          class="text-xs uppercase tracking-[0.35em] text-white/50"
+        >
+          crafted by
+        </p>
+        <p
+          class="mt-2 text-3xl font-semibold"
+        >
+          Salama Malek
+        </p>
+        <p
+          class="mt-2 max-w-xl text-sm text-white/70"
+        >
+          Frontend developer focused on thoughtful interview experiences. Reach out any time to collaborate or ship the backend when you're ready.
+        </p>
+      </div>
+      <div
+        class="flex flex-wrap gap-3"
+      >
+        <a
+          class="rounded-full border border-white/15 px-4 py-2 text-sm text-white/80 transition hover:border-white/30 hover:text-white"
+          href="mailto:salamahassanein@gmail.com"
+        >
+          Email
+        </a>
+        <a
+          class="rounded-full border border-white/15 px-4 py-2 text-sm text-white/80 transition hover:border-white/30 hover:text-white"
+          href="https://github.com/Salama-Malek"
+          rel="noreferrer"
+          target="_blank"
+        >
+          GitHub
+        </a>
+        <a
+          class="rounded-full border border-white/15 px-4 py-2 text-sm text-white/80 transition hover:border-white/30 hover:text-white"
+          href="https://www.linkedin.com/in/salama-malek/"
+          rel="noreferrer"
+          target="_blank"
+        >
+          LinkedIn
+        </a>
+      </div>
+    </div>
+    <div
+      class="mt-6 flex flex-col gap-2 border-t border-white/10 pt-4 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <span>
+        © 
+        2025
+         IntervueAI Studio. All rights reserved.
+      </span>
+      <span>
+        salamahassanein@gmail.com
+      </span>
+    </div>
+  </footer>
+</div>
+`;
+
+exports[`accessibility snapshots > renders transcript list with diarized badges 1`] = `
+<div>
+  <div
+    class="flex flex-col gap-3"
+  >
+    <div
+      class="flex gap-3"
+    >
+      <div
+        class="flex-shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold text-white tracking-widest bg-gradient-to-r from-sky-500 to-cyan-400"
+      >
+        USER
+      </div>
+      <div
+        class="flex-1 rounded-2xl border border-white/5 bg-white/5 px-4 py-2 text-sm text-white/90"
+      >
+        I optimize bundle size by code-splitting adapters.
+      </div>
+    </div>
+    <div
+      class="flex gap-3"
+    >
+      <div
+        class="flex-shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold text-white tracking-widest bg-gradient-to-r from-fuchsia-500 to-purple-500"
+      >
+        AI
+      </div>
+      <div
+        class="flex-1 rounded-2xl border border-white/5 bg-white/5 px-4 py-2 text-sm text-white/90"
+      >
+        Score: 85/100. Next question: explain memoization tradeoffs.
+      </div>
+    </div>
+    <div
+      class="flex gap-3 opacity-60"
+    >
+      <div
+        class="flex-shrink-0 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 px-3 py-1 text-[11px] font-semibold text-white tracking-widest"
+      >
+        USER
+      </div>
+      <div
+        class="flex-1 rounded-2xl border border-white/5 bg-white/5 px-4 py-2 italic text-white/60"
+      >
+        Typing�
+      </div>
+    </div>
+  </div>
+</div>
+`;
