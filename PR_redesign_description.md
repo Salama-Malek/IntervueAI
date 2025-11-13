@@ -1,34 +1,33 @@
-# PR: IntervueAI Ops Deck Redesign Foundation
+# PR: IntervueAI Ops Deck Refactor
 
 ## Rationale
-- Capture the current product purpose, stack, and content debts in a single report for PM/Eng alignment.
-- Establish normalized design tokens + component skeletons so UI refactors stop duplicating markup.
-- Provide cleaned copy + mockups that match the cinematic Ops Deck direction while remaining WCAG AA compliant.
+- Align the live Ops Deck with the new design-system primitives so the running app matches the documented mockups/tokens.
+- Centralize Session DNA logic through `InterviewConfigPanel` so role/language toggles share ARIA + handler semantics.
+- Address the previously reported accessibility gaps (no dialog semantics, missing `role="log"`, silent mic state) and unblock CI by stabilizing mocks/tests.
 
 ## Top Changes
-1. Added `design-redesign-report.json` with product summary, token map, component schemas, and migration steps.
-2. Introduced `design-system/` (tokens, README, components, mockups) to serve as the source of truth for neon glass UI.
-3. Authored `_proposed_content_edits/` with original vs cleaned copy for Dashboard, Recordings, Insights, and Library surfaces.
-4. Documented commit plan + PR expectations (`design-redesign-commit-log.md`, `PR_redesign_description.md`).
-5. Added perf/accessibility notes, tests, and CI updates (subsequent commits) to enforce the migration plan.
+1. Routed `main.tsx` through `design-tokens.css`/`critical.css` and rebuilt `AppShell` with `Header`, `LeftNav`, `KPICard`, and `PrimaryButton`.
+2. Upgraded `InterviewConfigPanel` to expose `visibleSections`, `header`, and `onChange` props and wired both Session DNA cards into it.
+3. Added a reusable `Dialog` + aria fixes for transcript/mic widgets, refreshed snapshots, and lazy-loaded the Session Viewer for smaller first paint.
 
-## Acceptance Tests
-- `npm run lint` and `npm run typecheck` succeed (no new TS errors introduced by skeleton files).
-- `npm test` runs the new accessibility snapshot suite.
-- Manual: open `design-system/mockups/*.html` in a browser and confirm responsive stacking + contrast.
-- Manual: review `_proposed_content_edits/*/cleaned.txt` to confirm hero =60 chars, CTAs =3 words, meta between 120–155 chars.
+## Acceptance Criteria
+- Visual tokens applied: new sidebar/Header/KPI cards render from the design-system components.
+- Session DNA uses `InterviewConfigPanel` with sections/headers and disables controls while recording.
+- Transcript panel exposes `role="log"` + `aria-live="polite"`; mic indicator announces idle/listening states.
+- `npm run test -- --run` and `npm run build` both succeed locally (see logs below).
 
 ## Rollback Plan
-Revert the staged commits in reverse order:
-1. `test: add accessibility snapshot tests & basic CI config update`
-2. `perf: add image optimization notes and critical CSS skeleton`
-3. `chore: add proposed content edits under _proposed_content_edits/`
-4. `refactor(ui): replace Header, LeftNav, KPICard, PrimaryButton with skeletons`
-5. `feat(ui): add design-system tokens and component skeletons`
-6. `chore: add design-redesign-report.json`
+Revert commits in reverse order:
+1. `test: refresh accessibility snapshots and bootstrap entry`
+2. `perf: lazy-load session modal and preconnect fonts`
+3. `fix(a11y): resolve dialog, transcript, and mock typings`
+4. `feat(ui): replace Session DNA markup with InterviewConfigPanel`
+5. `feat(ui): wire design-system Header/LeftNav/KPICard/PrimaryButton`
+6. `chore: integrate design tokens + critical css`
 
-## Before / After (copy example)
-```
-Before CTA: "Export board" (4 chars, passive)
-After CTA:  "Export data" (active voice, 2 words, reusable token)
-```
+## Verification / Screenshot Notes
+1. `npm run dev` ? visit http://localhost:5173 and capture:
+   - Sidebar + Header + KPIs (desktop).
+   - Interview Studio (before and after toggling focus mode).
+2. Open Session Viewer from Playback Log ? ensure modal traps focus and record a screenshot.
+3. Use browser dev tools to inspect `.transcript` container for `role="log"` and `aria-live="polite"` attributes.
