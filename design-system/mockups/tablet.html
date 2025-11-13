@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>IntervueAI Tablet Mock</title>
+    <style>
+      :root {
+        --bg: #05010a;
+        --glass: rgba(255, 255, 255, 0.08);
+        --border: rgba(255, 255, 255, 0.15);
+      }
+      body {
+        margin: 0;
+        font-family: 'Space Grotesk', sans-serif;
+        background: radial-gradient(120% 120% at 50% 0%, #2d1b69 0%, var(--bg) 70%, #020202 100%);
+        color: white;
+        padding: 1.5rem;
+      }
+      .frame {
+        border: 1px solid var(--border);
+        border-radius: 32px;
+        backdrop-filter: blur(24px);
+        background: rgba(2, 2, 2, 0.65);
+        padding: 1.5rem;
+        display: grid;
+        gap: 1.5rem;
+      }
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+      }
+      .kpi-card {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .studio {
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        background: rgba(12, 15, 25, 0.75);
+      }
+      button {
+        width: 100%;
+        border-radius: 999px;
+        border: none;
+        padding: 0.75rem;
+        background-image: linear-gradient(120deg, #10b981, #38bdf8);
+        color: white;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <header>
+        <p style="letter-spacing:0.35em;font-size:0.6rem;color:rgba(255,255,255,0.5);">Ops center</p>
+        <h1 style="margin:0">Practice monitor</h1>
+        <p style="color:rgba(255,255,255,0.65);font-size:0.85rem;">Track transcripts, analytics, and storage from a single board.</p>
+      </header>
+      <section class="kpis">
+        <div class="kpi-card">
+          <p style="letter-spacing:0.3em;font-size:0.65rem;">Languages</p>
+          <h3 style="margin:0;font-size:1.5rem;">2</h3>
+          <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);">English & Arabic ready-made</p>
+        </div>
+        <div class="kpi-card">
+          <p style="letter-spacing:0.3em;font-size:0.65rem;">Session capacity</p>
+          <h3 style="margin:0;font-size:1.5rem;">Unlimited</h3>
+          <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Local-first archive</p>
+        </div>
+      </section>
+      <section class="studio">
+        <h2 style="margin-top:0;">Interview studio</h2>
+        <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Transcript placeholder with focus button.</p>
+        <button>Focus mode</button>
+      </section>
+    </div>
+  </body>
+</html>

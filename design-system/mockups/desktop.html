@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>IntervueAI Desktop Mock</title>
+    <style>
+      :root {
+        --ink-1000: #010104;
+        --ink-900: #05010a;
+        --ink-800: #0f172a;
+        --glass: rgba(255, 255, 255, 0.08);
+        --border: rgba(255, 255, 255, 0.15);
+        --frost: #f8fbff;
+        --emerald: #10b981;
+        --cyan: #38bdf8;
+      }
+      * { box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--frost);
+        background: radial-gradient(120% 120% at 50% 0%, #2d1b69 0%, var(--ink-900) 65%, var(--ink-1000) 100%);
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 2rem;
+        padding: 2rem;
+      }
+      aside {
+        border: 1px solid var(--border);
+        border-radius: 32px;
+        padding: 1.5rem;
+        background: rgba(2, 2, 2, 0.65);
+        backdrop-filter: blur(24px);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      main {
+        border-radius: 32px;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(24px);
+      }
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+      }
+      .kpi-card {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 20px 50px rgba(3, 7, 18, 0.55);
+      }
+      .studio {
+        margin-top: 2rem;
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 1.5rem;
+        background: rgba(5, 8, 17, 0.7);
+      }
+      button {
+        border: 0;
+        border-radius: 999px;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: white;
+        background-image: linear-gradient(90deg, var(--emerald), var(--cyan));
+      }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <header>
+        <p style="letter-spacing:0.35em;font-size:0.6rem;color:rgba(255,255,255,0.6);">IntervueAI</p>
+        <h1 style="margin:0;">Ops Deck</h1>
+      </header>
+      <nav>
+        <p style="font-size:0.65rem;letter-spacing:0.35em;color:rgba(255,255,255,0.5);">Dashboard</p>
+        <p style="font-size:0.65rem;letter-spacing:0.35em;color:rgba(255,255,255,0.3);">Recordings</p>
+        <p style="font-size:0.65rem;letter-spacing:0.35em;color:rgba(255,255,255,0.3);">Insights</p>
+      </nav>
+      <section>
+        <h2 style="font-size:1rem;">Session DNA</h2>
+        <p style="font-size:0.85rem;color:rgba(255,255,255,0.65);">Roles • Seniority • Language</p>
+      </section>
+    </aside>
+    <main>
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <p style="letter-spacing:0.3em;font-size:0.65rem;">Active roles</p>
+          <h3 style="margin:0;font-size:2rem;">6</h3>
+          <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Frontend, Backend, Product</p>
+        </div>
+        <div class="kpi-card">
+          <p style="letter-spacing:0.3em;font-size:0.65rem;">Avg score lift</p>
+          <h3 style="margin:0;font-size:2rem;">+32%</h3>
+          <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Last 20 sessions</p>
+        </div>
+      </section>
+      <div class="studio">
+        <h2 style="margin-top:0;">Interview studio</h2>
+        <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Transcript panel & controls placeholder</p>
+        <button>Begin Session</button>
+      </div>
+    </main>
+  </body>
+</html>
