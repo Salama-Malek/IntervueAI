@@ -18,7 +18,9 @@ import { LeftNav } from '../../design-system/components/LeftNav';
 import { KPICard } from '../../design-system/components/KPICard';
 import { PrimaryButton } from '../../design-system/components/PrimaryButton';
 
-const SessionViewerModal = lazy(() => import('./SessionViewerModal'));
+const SessionViewerModal = lazy(async () => ({
+  default: (await import('./SessionViewerModal')).SessionViewerModal,
+}));
 
 type NavLinkId = 'dashboard' | 'recordings' | 'insights' | 'library';
 

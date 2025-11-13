@@ -70,8 +70,12 @@ exports[`accessibility snapshots > renders footer with contact links + roles 1`]
 
 exports[`accessibility snapshots > renders transcript list with diarized badges 1`] = `
 <div>
-  <div
+  <section
+    aria-label="Live transcript"
+    aria-live="polite"
+    aria-relevant="additions text"
     class="flex flex-col gap-3"
+    role="log"
   >
     <div
       class="flex gap-3"
@@ -115,6 +119,6 @@ exports[`accessibility snapshots > renders transcript list with diarized badges 
         Typing�
       </div>
     </div>
-  </div>
+  </section>
 </div>
 `;
