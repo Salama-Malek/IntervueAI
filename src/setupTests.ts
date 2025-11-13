@@ -40,6 +40,10 @@ class MockSpeechSynthesisUtterance {
   onstart: SpeechSynthesisHandler | null = null;
   onend: SpeechSynthesisHandler | null = null;
   onerror: SpeechSynthesisHandler | null = null;
+  onboundary: SpeechSynthesisHandler | null = null;
+  onmark: SpeechSynthesisHandler | null = null;
+  onpause: SpeechSynthesisHandler | null = null;
+  onresume: SpeechSynthesisHandler | null = null;
 
   constructor(text?: string) {
     if (text) this.text = text;
@@ -88,23 +92,34 @@ class MockAudioContext {
 const testGlobals = globalThis as typeof globalThis & {
   SpeechRecognition: typeof MockSpeechRecognition;
   webkitSpeechRecognition: typeof MockSpeechRecognition;
-  speechSynthesis: MockSpeechSynthesis;
-  SpeechSynthesisUtterance: typeof MockSpeechSynthesisUtterance;
-  AudioContext: typeof MockAudioContext;
+  speechSynthesis: SpeechSynthesis & MockSpeechSynthesis;
+  SpeechSynthesisUtterance: typeof SpeechSynthesisUtterance;
+  AudioContext: typeof AudioContext;
 };
 
 testGlobals.SpeechRecognition = MockSpeechRecognition;
 testGlobals.webkitSpeechRecognition = MockSpeechRecognition;
 
-testGlobals.speechSynthesis = {
+const speechSynthesisMock: SpeechSynthesis & MockSpeechSynthesis = {
   speak: () => undefined,
   cancel: () => undefined,
   getVoices: () => [],
   onvoiceschanged: null,
+  paused: false,
+  pending: false,
+  speaking: false,
+  addEventListener: () => undefined,
+  removeEventListener: () => undefined,
+  dispatchEvent: () => true,
+  pause: () => undefined,
+  resume: () => undefined,
 };
 
-testGlobals.SpeechSynthesisUtterance = MockSpeechSynthesisUtterance;
-testGlobals.AudioContext = MockAudioContext;
+testGlobals.speechSynthesis = speechSynthesisMock;
+
+testGlobals.SpeechSynthesisUtterance =
+  MockSpeechSynthesisUtterance as unknown as typeof SpeechSynthesisUtterance;
+testGlobals.AudioContext = MockAudioContext as unknown as typeof AudioContext;
 
 Object.defineProperty(navigator, 'mediaDevices', {
   writable: true,

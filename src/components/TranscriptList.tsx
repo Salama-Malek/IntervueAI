@@ -36,7 +36,13 @@ export function TranscriptList({
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <section
+      className="flex flex-col gap-3"
+      role="log"
+      aria-live="polite"
+      aria-relevant="additions text"
+      aria-label="Live transcript"
+    >
       {transcript.map((utterance) => (
         <div key={utterance.id} className="flex gap-3">
           <div
@@ -61,6 +67,6 @@ export function TranscriptList({
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }
