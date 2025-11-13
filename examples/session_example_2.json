@@ -1,0 +1,68 @@
+{
+  "config": {
+    "role": "Backend",
+    "seniority": "Mid",
+    "language": "en-US"
+  },
+  "transcript": [
+    {
+      "id": "sys1",
+      "speaker": "system",
+      "text": "Interview started",
+      "startedAt": 1699651200000,
+      "endedAt": 1699651200100
+    },
+    {
+      "id": "ai1",
+      "speaker": "ai",
+      "text": "How would you design a scalable API architecture?",
+      "startedAt": 1699651200200,
+      "endedAt": 1699651200500
+    },
+    {
+      "id": "user1",
+      "speaker": "user",
+      "text": "First, I would ensure the API is stateless to enable horizontal scaling. Second, I would implement load balancing to distribute traffic across multiple servers. Additionally, I would use caching strategies like Redis to reduce database load. Therefore, the architecture would support high availability and fault tolerance through redundancy.",
+      "startedAt": 1699651205000,
+      "endedAt": 1699651220000
+    },
+    {
+      "id": "ai2",
+      "speaker": "ai",
+      "text": "Score: 85/100. Good answer length. Well-structured response. Strong technical content. Next question: Explain the concept of database indexing and its impact on performance.",
+      "startedAt": 1699651220500,
+      "endedAt": 1699651225000
+    },
+    {
+      "id": "user2",
+      "speaker": "user",
+      "text": "Database indexing creates a data structure that improves query performance by allowing faster lookups. However, indexes consume additional storage and can slow down write operations. Therefore, it's important to index columns that are frequently used in WHERE clauses or JOIN operations. Because of this trade-off, we need to balance read and write performance.",
+      "startedAt": 1699651230000,
+      "endedAt": 1699651245000
+    },
+    {
+      "id": "ai3",
+      "speaker": "ai",
+      "text": "Score: 80/100. Good answer length. Well-structured response. Strong technical content. That concludes our interview. Thank you for your time!",
+      "startedAt": 1699651245500,
+      "endedAt": 1699651250000
+    },
+    {
+      "id": "sys2",
+      "speaker": "system",
+      "text": "Interview stopped",
+      "startedAt": 1699651250100,
+      "endedAt": 1699651250200
+    }
+  ],
+  "metrics": {
+    "turns": 2,
+    "userWordCount": 118,
+    "aiQuestions": 2,
+    "metrics": {
+      "avgResponseTimeMs": 4750,
+      "totalDurationMs": 50200
+    }
+  },
+  "createdAt": "2024-11-11T10:00:00.000Z"
+}

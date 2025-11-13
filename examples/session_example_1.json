@@ -1,0 +1,82 @@
+{
+  "config": {
+    "role": "Frontend",
+    "seniority": "Junior",
+    "language": "en-US"
+  },
+  "transcript": [
+    {
+      "id": "sys1",
+      "speaker": "system",
+      "text": "Interview started",
+      "startedAt": 1699564800000,
+      "endedAt": 1699564800100
+    },
+    {
+      "id": "ai1",
+      "speaker": "ai",
+      "text": "What is the difference between let, const, and var in JavaScript?",
+      "startedAt": 1699564800200,
+      "endedAt": 1699564800500
+    },
+    {
+      "id": "user1",
+      "speaker": "user",
+      "text": "First, var is function-scoped while let and const are block-scoped. Second, const cannot be reassigned after declaration, however let can be reassigned. Therefore, I prefer using const by default and let when I need to reassign values. Because var has hoisting issues, it's generally avoided in modern JavaScript.",
+      "startedAt": 1699564805000,
+      "endedAt": 1699564820000
+    },
+    {
+      "id": "ai2",
+      "speaker": "ai",
+      "text": "Score: 78/100. Good answer length. Well-structured response. Strong technical content. Next question: Can you explain what the virtual DOM is and why React uses it?",
+      "startedAt": 1699564820500,
+      "endedAt": 1699564825000
+    },
+    {
+      "id": "user2",
+      "speaker": "user",
+      "text": "The virtual DOM is a lightweight copy of the actual DOM. React uses it because it's faster to manipulate than the real DOM. When state changes, React creates a new virtual DOM and compares it with the previous one through a process called reconciliation. Finally, only the differences are applied to the real DOM, which improves performance.",
+      "startedAt": 1699564830000,
+      "endedAt": 1699564845000
+    },
+    {
+      "id": "ai3",
+      "speaker": "ai",
+      "text": "Score: 82/100. Good answer length. Well-structured response. Strong technical content. Next question: What are React hooks and why were they introduced?",
+      "startedAt": 1699564845500,
+      "endedAt": 1699564850000
+    },
+    {
+      "id": "user3",
+      "speaker": "user",
+      "text": "React hooks are functions that let you use state and lifecycle features in functional components. They were introduced because functional components are simpler and easier to test than class components. Additionally, hooks allow you to reuse stateful logic without changing component hierarchy.",
+      "startedAt": 1699564855000,
+      "endedAt": 1699564870000
+    },
+    {
+      "id": "ai4",
+      "speaker": "ai",
+      "text": "Score: 75/100. Good answer length. Well-structured response. Strong technical content. That concludes our interview. Thank you for your time!",
+      "startedAt": 1699564870500,
+      "endedAt": 1699564875000
+    },
+    {
+      "id": "sys2",
+      "speaker": "system",
+      "text": "Interview stopped",
+      "startedAt": 1699564875100,
+      "endedAt": 1699564875200
+    }
+  ],
+  "metrics": {
+    "turns": 3,
+    "userWordCount": 152,
+    "aiQuestions": 3,
+    "metrics": {
+      "avgResponseTimeMs": 5000,
+      "totalDurationMs": 75200
+    }
+  },
+  "createdAt": "2024-11-10T10:00:00.000Z"
+}

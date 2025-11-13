@@ -1,0 +1,114 @@
+/**
+ * Configuration panel for interview settings
+ */
+
+import type { Role, Seniority } from '../lib/questions';
+
+interface InterviewConfigPanelProps {
+  role: Role;
+  seniority: Seniority;
+  language: string;
+  onRoleChange: (role: Role) => void;
+  onSeniorityChange: (seniority: Seniority) => void;
+  onLanguageChange: (language: string) => void;
+  disabled: boolean;
+}
+
+const ROLES: Role[] = [
+  'Frontend',
+  'Backend',
+  'Full-Stack',
+  'Data Engineer',
+  'Product Manager',
+  'UX',
+];
+
+const SENIORITIES: Seniority[] = ['Junior', 'Mid', 'Senior'];
+
+const LANGUAGES = [
+  { code: 'en-US', label: 'English (US)' },
+  { code: 'ar-EG', label: 'Arabic (Egypt)' },
+];
+
+export function InterviewConfigPanel({
+  role,
+  seniority,
+  language,
+  onRoleChange,
+  onSeniorityChange,
+  onLanguageChange,
+  disabled,
+}: InterviewConfigPanelProps) {
+  return (
+    <div className="space-y-4 rounded-lg bg-gray-800 p-4">
+      <h2 className="text-lg font-semibold text-white">Interview Settings</h2>
+
+      <div>
+        <label
+          htmlFor="role-select"
+          className="mb-1 block text-sm font-medium text-gray-300"
+        >
+          Role
+        </label>
+        <select
+          id="role-select"
+          value={role}
+          onChange={(e) => onRoleChange(e.target.value as Role)}
+          disabled={disabled}
+          className="w-full rounded border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {ROLES.map((r) => (
+            <option key={r} value={r}>
+              {r}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label
+          htmlFor="seniority-select"
+          className="mb-1 block text-sm font-medium text-gray-300"
+        >
+          Seniority
+        </label>
+        <select
+          id="seniority-select"
+          value={seniority}
+          onChange={(e) => onSeniorityChange(e.target.value as Seniority)}
+          disabled={disabled}
+          className="w-full rounded border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {SENIORITIES.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label
+          htmlFor="language-select"
+          className="mb-1 block text-sm font-medium text-gray-300"
+        >
+          Language
+        </label>
+        <select
+          id="language-select"
+          value={language}
+          onChange={(e) => onLanguageChange(e.target.value)}
+          disabled={disabled}
+          className="w-full rounded border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {LANGUAGES.map((lang) => (
+            <option key={lang.code} value={lang.code}>
+              {lang.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+}
+

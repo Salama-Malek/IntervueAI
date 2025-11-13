@@ -1,0 +1,182 @@
+openapi: 3.0.3
+info:
+  title: IntervueAI API
+  version: 0.1.0
+  description: Minimal API for session-based interview turns.
+servers:
+  - url: http://localhost:8787
+paths:
+  /sessions/start:
+    post:
+      summary: Start a session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InterviewConfig'
+      responses:
+        '200':
+          description: Session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionId:
+                    type: string
+                  firstQuestion:
+                    $ref: '#/components/schemas/AdapterReply'
+  /sessions/{sessionId}/first:
+    get:
+      summary: Get first question again (optional)
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: First question
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+  /sessions/{sessionId}/message:
+    post:
+      summary: Submit user answer and get next reply
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userText:
+                  type: string
+      responses:
+        '200':
+          description: Next reply
+          content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reply:
+                  $ref: '#/components/schemas/AdapterReply'
+  /sessions/{sessionId}/persist:
+    post:
+      summary: Persist a completed session
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersistSession'
+      responses:
+        '200':
+          description: Session persisted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stored:
+                    type: boolean
+  /sessions:
+    get:
+      summary: List persisted sessions
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sessions fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PersistSession'
+
+components:
+  schemas:
+    InterviewConfig:
+      type: object
+      required: [role, seniority, language]
+      properties:
+        role:
+          type: string
+          enum: [Frontend, Backend, Full-Stack, Data Engineer, Product Manager, UX]
+        seniority:
+          type: string
+          enum: [Junior, Mid, Senior]
+        language:
+          type: string
+          example: en-US
+        voice:
+          type: string
+          nullable: true
+    AdapterReply:
+      type: object
+      required: [text]
+      properties:
+        text:
+          type: string
+        score:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        feedback:
+          type: string
+    PersistSession:
+      type: object
+      required: [sessionId, config, transcript, summary, createdAt]
+      properties:
+        sessionId:
+          type: string
+        config:
+          $ref: '#/components/schemas/InterviewConfig'
+        transcript:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              speaker:
+                type: string
+              text:
+                type: string
+              startedAt:
+                type: number
+              endedAt:
+                type: number
+        summary:
+          type: object
+          description: Session summary metrics
+        createdAt:
+          type: string
+          format: date-time

@@ -1,0 +1,47 @@
+.
+├── examples
+│   ├── session_example_1.json
+│   └── session_example_2.json
+├── src
+│   ├── adapters
+│   │   ├── AdapterTypes.ts
+│   │   └── LocalWebSpeechAdapter.ts
+│   ├── components
+│   │   ├── AppShell.tsx
+│   │   ├── ControlsBar.tsx
+│   │   ├── InterviewConfigPanel.tsx
+│   │   ├── InterviewRoom.tsx
+│   │   ├── MicGateIndicator.tsx
+│   │   ├── ReportPanel.tsx
+│   │   ├── TranscriptList.test.tsx
+│   │   └── TranscriptList.tsx
+│   ├── hooks
+│   │   ├── useRmsGate.ts
+│   │   ├── useSpeechStt.ts
+│   │   └── useSpeechTts.ts
+│   ├── lib
+│   │   ├── i18n.ts
+│   │   ├── ids.ts
+│   │   ├── questions.test.ts
+│   │   ├── questions.ts
+│   │   ├── scoring.test.ts
+│   │   ├── scoring.ts
+│   │   ├── summarize.test.ts
+│   │   └── summarize.ts
+│   ├── App.tsx
+│   ├── index.css
+│   ├── main.tsx
+│   ├── setupTests.ts
+│   └── vite-env.d.ts
+├── README.md
+├── VERIFICATION.md
+├── index.html
+├── package.json
+├── postcss.config.js
+├── project_tree.txt
+├── tailwind.config.js
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+
+6 directories, 38 files
