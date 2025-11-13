@@ -3,7 +3,7 @@
  * and a focus mode for the interview studio.
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import type { InterviewConfig } from '../adapters/AdapterTypes';
 import { InterviewConfigPanel } from './InterviewConfigPanel';
 import { InterviewRoom } from './InterviewRoom';
@@ -11,13 +11,14 @@ import { getTextDirection } from '../lib/i18n';
 import { HistoryPanel } from './HistoryPanel';
 import { AnalyticsPanel } from './AnalyticsPanel';
 import type { StoredSession } from '../lib/storage';
-import { SessionViewerModal } from './SessionViewerModal';
 import type { AdapterKind } from '../types/interview';
 import { SiteFooter } from './SiteFooter';
 import { Header } from '../../design-system/components/Header';
 import { LeftNav } from '../../design-system/components/LeftNav';
 import { KPICard } from '../../design-system/components/KPICard';
 import { PrimaryButton } from '../../design-system/components/PrimaryButton';
+
+const SessionViewerModal = lazy(() => import('./SessionViewerModal'));
 
 type NavLinkId = 'dashboard' | 'recordings' | 'insights' | 'library';
 
@@ -273,7 +274,11 @@ export function AppShell() {
         </div>
       </div>
 
-      {viewSession && <SessionViewerModal session={viewSession} onClose={() => setViewSession(null)} />}
+      {viewSession && (
+        <Suspense fallback={null}>
+          <SessionViewerModal session={viewSession} onClose={() => setViewSession(null)} />
+        </Suspense>
+      )}
     </div>
   );
 }
