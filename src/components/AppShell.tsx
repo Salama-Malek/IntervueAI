@@ -4,7 +4,6 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import type { Role, Seniority } from '../lib/questions';
 import type { InterviewConfig } from '../adapters/AdapterTypes';
 import { InterviewConfigPanel } from './InterviewConfigPanel';
 import { InterviewRoom } from './InterviewRoom';
@@ -102,6 +101,10 @@ export function AppShell() {
     console.info('Export board action requested');
   };
 
+  const handleConfigChange = (changes: Partial<InterviewConfig>) => {
+    setConfig((prev) => ({ ...prev, ...changes }));
+  };
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white" dir={textDirection}>
       <div className="noise-overlay" />
@@ -127,13 +130,17 @@ export function AppShell() {
                 role={config.role}
                 seniority={config.seniority}
                 language={config.language}
-                onRoleChange={(role: Role) => setConfig({ ...config, role })}
-                onSeniorityChange={(seniority: Seniority) => setConfig({ ...config, seniority })}
-                onLanguageChange={(language: string) => setConfig({ ...config, language })}
                 adapter={adapter}
                 onAdapterChange={(a) => setAdapter(a)}
                 disabled={isInterviewStarted}
                 visibleSections={['role', 'seniority']}
+                header={{
+                  eyebrow: 'Configure',
+                  title: 'Role & seniority',
+                  description: 'Blend seniority and craft to focus each mock session.',
+                }}
+                initialState={config}
+                onChange={handleConfigChange}
               />
             </section>
 
@@ -189,14 +196,17 @@ export function AppShell() {
                   role={config.role}
                   seniority={config.seniority}
                   language={config.language}
-                  onRoleChange={(role: Role) => setConfig({ ...config, role })}
-                  onSeniorityChange={(seniority: Seniority) => setConfig({ ...config, seniority })}
-                  onLanguageChange={(language: string) => setConfig({ ...config, language })}
                   adapter={adapter}
                   onAdapterChange={(a) => setAdapter(a)}
                   disabled={isInterviewStarted}
                   visibleSections={['language', 'engine']}
-                  header={{ eyebrow: 'Live toggles', title: 'Language & engine', description: 'Adjust voice + adapter before each question.' }}
+                  header={{
+                    eyebrow: 'Live toggles',
+                    title: 'Language & engine',
+                    description: 'Adjust voice + adapter before each question.',
+                  }}
+                  initialState={config}
+                  onChange={handleConfigChange}
                 />
               </section>
 
