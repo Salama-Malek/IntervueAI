@@ -1,0 +1,3 @@
+Heading: Pulse
+Empty state: Run a session to unlock motion charts.
+Metric labels: Turns / Words / Score

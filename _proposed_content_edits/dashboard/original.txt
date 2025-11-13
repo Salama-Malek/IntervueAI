@@ -1,0 +1,5 @@
+Heading: Ops center
+Subheading: Practice monitor
+Body: Track transcripts, analytics, and storage from a single board.
+Primary CTA: Export board
+Secondary CTA: Focus mode

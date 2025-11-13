@@ -1,0 +1,3 @@
+Heading: Playback Log (Archive)
+Empty state: No sessions yet. Complete an interview to see your timeline light up.
+CTAs: View transcript / Download JSON / Delete

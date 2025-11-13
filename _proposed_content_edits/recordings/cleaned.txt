@@ -1,0 +1,6 @@
+Hero (=60c): Recording vault
+Supporting line: Replay transcripts, download evidence, or prune stale runs in seconds.
+Meta (135c): Browse every saved mock interview with sorted stats, jump into transcripts instantly, or pull structured exports for onward analysis.
+Primary CTA (1-3 words): View log
+Secondary CTA (1-3 words): Get JSON
+Tertiary CTA (1-3 words): Remove run

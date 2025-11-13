@@ -1,0 +1,3 @@
+Heading: Storage status
+Subheading: Local-first
+Body: Sessions are stored in-browser. Connect your backend later to sync using the REST adapter without changing this workspace.
