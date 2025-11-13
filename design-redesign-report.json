@@ -1,0 +1,579 @@
+{
+  "summary": "IntervueAI is a voice-first mock interview studio that pairs scripted or REST-backed prompts with live transcripts, heuristics, and analytics inside a cinematic Ops Deck dashboard.",
+  "stack": "React 18 + TypeScript + Vite + Tailwind + React Query + Web Speech/Web Audio APIs on the frontend, optional Express REST shim + MSW for mocking, Vitest/RTL for testing.",
+  "routes": [
+    {
+      "path": "/",
+      "label": "Ops Deck",
+      "description": "Primary dashboard that renders hero KPIs, the Interview Studio, Session DNA controls, analytics cards, and footer.",
+      "status": "production",
+      "notes": "Built from AppShell + InterviewRoom + HistoryPanel + AnalyticsPanel components."
+    },
+    {
+      "path": "/recordings",
+      "label": "Playback Log",
+      "description": "Local-first archive of stored sessions with transcript viewer/download/delete actions.",
+      "status": "embedded panel",
+      "notes": "HistoryPanel + SessionViewerModal reuse this copy."
+    },
+    {
+      "path": "/insights",
+      "label": "Pulse",
+      "description": "Sparkline analytics summarizing turns, word counts, and score deltas across runs.",
+      "status": "embedded panel",
+      "notes": "AnalyticsPanel pulls from localStorage/MSW through React Query."
+    },
+    {
+      "path": "/library",
+      "label": "Storage status",
+      "description": "Explains the current local-only persistence model and future backend sync via REST adapter.",
+      "status": "static copy",
+      "notes": "Located in AppShell right rail; no dedicated route yet."
+    },
+    {
+      "path": "/session/:id",
+      "label": "Session viewer modal",
+      "description": "Modal overlay for transcript review, metrics, and exports.",
+      "status": "modal",
+      "notes": "SessionViewerModal lacks focus trap + ARIA dialog semantics."
+    }
+  ],
+  "component_inventory": [
+    {
+      "name": "Header",
+      "description": "Ops Deck banner with eyebrow, title, description, status chip, and action slot.",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "description": "Uppercase label above the title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "description": "Primary headline."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "description": "Support sentence."
+        },
+        {
+          "name": "statusChip",
+          "type": "{ label: string; tone?: 'idle' | 'live' }",
+          "description": "Displays board state."
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "description": "Custom buttons such as export/focus toggles."
+        }
+      ],
+      "snippet": "<header role=\"banner\" class=\"rounded-3xl border bg-slate-900/50 text-white\">\n  <div>\n    <p class=\"text-[0.65rem] uppercase tracking-[0.35em]\">Ops center</p>\n    <h1 class=\"text-2xl font-semibold\">Practice monitor</h1>\n  </div>\n  <span role=\"status\" class=\"rounded-full border px-3 py-1\">Live capture</span>\n</header>"
+    },
+    {
+      "name": "LeftNav",
+      "description": "Fixed sidebar with brand chip, version, and CTA-styled nav buttons.",
+      "props": [
+        {
+          "name": "brand",
+          "type": "{ initials: string; label: string; version?: string }",
+          "description": "Logo token + label."
+        },
+        {
+          "name": "links",
+          "type": "LeftNavLink[]",
+          "description": "Button list with labels/badges."
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "description": "Optional secondary content (adapter switch, support)."
+        },
+        {
+          "name": "onSelect",
+          "type": "(id: string) => void",
+          "description": "Callback when nav button pressed."
+        }
+      ],
+      "snippet": "<aside aria-label=\"Primary navigation\">\n  <button aria-current=\"page\" aria-pressed=\"true\">Dashboard<span>Live</span></button>\n</aside>"
+    },
+    {
+      "name": "KPICard",
+      "description": "Neon stat tiles for hero metrics (roles, score lift, languages, capacity).",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "description": "Upper eyebrow copy."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Primary metric."
+        },
+        {
+          "name": "detail",
+          "type": "string",
+          "description": "Context line."
+        },
+        {
+          "name": "trend",
+          "type": "'up' | 'down' | 'flat'",
+          "description": "Optional delta indicator."
+        }
+      ],
+      "snippet": "<article class=\"rounded-3xl border bg-white/5 p-4\">\n  <p class=\"text-[0.65rem] uppercase tracking-[0.3em]\">Active roles</p>\n  <p class=\"text-3xl font-semibold\">6</p>\n  <p class=\"text-sm text-white/70\">Frontend, Backend, Product</p>\n</article>"
+    },
+    {
+      "name": "SessionDNA",
+      "description": "Grouped toggle set controlling role, seniority, language, and adapter.",
+      "props": [
+        {
+          "name": "groups",
+          "type": "{ id: string; label: string; options: { id: string; label: string; helper?: string }[]; value: string }[]",
+          "description": "Configuration sections."
+        },
+        {
+          "name": "onSelect",
+          "type": "(groupId: string, optionId: string) => void",
+          "description": "Handles selection."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Locks controls while recording."
+        }
+      ],
+      "snippet": "<section aria-labelledby=\"session-dna\">\n  <h2 id=\"session-dna\">Session DNA</h2>\n  <div role=\"group\" aria-label=\"Role focus\">\n    <button aria-pressed=\"true\">Frontend</button>\n  </div>\n</section>"
+    },
+    {
+      "name": "PillGroup",
+      "description": "Pill-style radio group for highlights or filters.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "description": "ARIA label for the group."
+        },
+        {
+          "name": "options",
+          "type": "{ id: string; label: string; badge?: string }[]",
+          "description": "Selectable pills."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Selected option id."
+        },
+        {
+          "name": "onChange",
+          "type": "(id: string) => void",
+          "description": "Selection handler."
+        }
+      ],
+      "snippet": "<div role=\"radiogroup\" aria-label=\"Session highlights\">\n  <button role=\"radio\" aria-checked=\"true\">Role focus</button>\n</div>"
+    },
+    {
+      "name": "PrimaryButton",
+      "description": "Gradient CTA used for Begin/End session, exports, and focus toggles.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "description": "Visible text."
+        },
+        {
+          "name": "variant",
+          "type": "'primary' | 'danger' | 'ghost'",
+          "description": "Colorway."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "description": "Adds aria-busy + spinner copy."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "description": "Optional leading icon."
+        }
+      ],
+      "snippet": "<button class=\"rounded-full bg-gradient-to-r from-emerald-500 to-cyan-400\" aria-busy=\"false\">Begin Session</button>"
+    },
+    {
+      "name": "InterviewStudio",
+      "description": "Wrapper that frames Mic indicator, ControlsBar, transcript, and summary in focus mode.",
+      "props": [
+        {
+          "name": "status",
+          "type": "'idle' | 'capturing'",
+          "description": "Updates status chip."
+        },
+        {
+          "name": "onToggleFocus",
+          "type": "() => void",
+          "description": "Expands/collapses fullscreen."
+        },
+        {
+          "name": "focusLabel",
+          "type": "string",
+          "description": "Custom text for the focus button."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "description": "InterviewRoom stack."
+        }
+      ],
+      "snippet": "<section class=\"rounded-[32px] border bg-white/5\">\n  <header>\n    <p class=\"text-[0.65rem]\">Live desk</p>\n    <button>Focus mode</button>\n  </header>\n</section>"
+    },
+    {
+      "name": "TranscriptPanel",
+      "description": "Scrollable log for diarized utterances + interim text.",
+      "props": [
+        {
+          "name": "entries",
+          "type": "{ id: string; speaker: 'user' | 'ai' | 'system'; text: string }[]",
+          "description": "Transcript items."
+        },
+        {
+          "name": "interimText",
+          "type": "string",
+          "description": "Live STT text."
+        }
+      ],
+      "snippet": "<section role=\"log\" aria-live=\"polite\">\n  <div class=\"flex gap-3\">\n    <span class=\"rounded-full bg-gradient-to-r from-sky-500 to-cyan-400\">USER</span>\n    <p class=\"rounded-2xl border bg-white/5\">Answer text</p>\n  </div>\n</section>"
+    },
+    {
+      "name": "PlaybackLog",
+      "description": "Accordion list of stored sessions with action buttons.",
+      "props": [
+        {
+          "name": "sessions",
+          "type": "PlaybackSession[]",
+          "description": "Items w/ label, timestamp, stats."
+        },
+        {
+          "name": "expandedId",
+          "type": "string",
+          "description": "Currently open accordion id."
+        },
+        {
+          "name": "onToggle",
+          "type": "(id: string) => void",
+          "description": "Expand/collapse handler."
+        },
+        {
+          "name": "onView",
+          "type": "(id: string) => void",
+          "description": "Opens transcript modal."
+        }
+      ],
+      "snippet": "<ul>\n  <li class=\"rounded-2xl border bg-white/5\">\n    <button aria-expanded=\"true\">Frontend / Senior</button>\n    <div role=\"group\">\n      <button>View transcript</button>\n    </div>\n  </li>\n</ul>"
+    },
+    {
+      "name": "FooterAuthorCard",
+      "description": "Attribution/footer block with contact links and metadata.",
+      "props": [
+        {
+          "name": "author",
+          "type": "string",
+          "description": "Name."
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "description": "Role tagline."
+        },
+        {
+          "name": "bio",
+          "type": "string",
+          "description": "Short description."
+        },
+        {
+          "name": "contacts",
+          "type": "{ label: string; href: string; external?: boolean }[]",
+          "description": "CTA chips."
+        }
+      ],
+      "snippet": "<footer role=\"contentinfo\" class=\"rounded-3xl border bg-slate-950/60\">\n  <p class=\"text-[0.6rem] uppercase tracking-[0.35em]\">crafted by</p>\n  <p class=\"text-3xl\">Salama Malek</p>\n  <a class=\"rounded-full border px-4 py-2\" href=\"mailto:salamahassanein@gmail.com\">Email</a>\n</footer>"
+    }
+  ],
+  "visual_tokens": {
+    "colors": {
+      "background": [
+        "#010104",
+        "#05010a",
+        "#0f172a"
+      ],
+      "text": {
+        "primary": "#f8fbff",
+        "muted": "rgba(248,251,255,0.6)"
+      },
+      "accents": {
+        "emerald": "#10b981",
+        "cyan": "#38bdf8",
+        "violet": "#a855f7",
+        "fuchsia": "#ec4899",
+        "amber": "#facc15",
+        "rose": "#f43f5e"
+      },
+      "surface": {
+        "glass": "rgba(255,255,255,0.05)",
+        "panel": "rgba(2,2,2,0.65)"
+      },
+      "borders": {
+        "soft": "rgba(255,255,255,0.12)",
+        "loud": "rgba(255,255,255,0.3)"
+      }
+    },
+    "typography": {
+      "font": "'Space Grotesk', 'Inter', sans-serif",
+      "weights": {
+        "regular": 400,
+        "medium": 500,
+        "semibold": 600
+      },
+      "eyebrowSpacing": "0.35em",
+      "scale": {
+        "xs": "0.75rem",
+        "sm": "0.875rem",
+        "md": "1rem",
+        "lg": "1.25rem",
+        "xl": "1.5rem",
+        "2xl": "2rem",
+        "3xl": "2.5rem"
+      }
+    },
+    "spacing": {
+      "xs": "0.5rem",
+      "sm": "0.75rem",
+      "md": "1rem",
+      "lg": "1.5rem",
+      "xl": "2rem",
+      "2xl": "3rem"
+    },
+    "radii": {
+      "pill": "999px",
+      "xl": "32px",
+      "lg": "24px",
+      "md": "16px"
+    },
+    "elevation": {
+      "low": "0 12px 30px rgba(3,7,18,0.45)",
+      "mid": "0 20px 50px rgba(3,7,18,0.55)",
+      "high": "0 35px 90px rgba(3,7,18,0.7)",
+      "glow": "0 0 25px rgba(56,189,248,0.35)"
+    },
+    "buttons": {
+      "height": "2.5rem",
+      "padding": "0.75rem 1.5rem",
+      "tracking": "0.2em",
+      "focusRing": "2px solid #38bdf8"
+    },
+    "inputs": {
+      "border": "1px solid rgba(255,255,255,0.12)",
+      "background": "rgba(255,255,255,0.05)",
+      "focus": "ring 2px #38bdf8"
+    }
+  },
+  "content_edits": {
+    "routes/dashboard": {
+      "original": "Heading: Ops center | Subheading: Practice monitor | Track transcripts, analytics, and storage from a single board. CTAs: Export board / Focus mode",
+      "cleaned": "Hero: Ops control room | Supporting: Command every mock interview artifact from one board. | Meta: Monitor transcripts, KPIs, and storage without tab hopping so the studio stays ready for the next run and exports stay synced. | CTAs: Export data / Open focus"
+    },
+    "routes/recordings": {
+      "original": "Heading: Playback Log (Archive) | Empty: No sessions yet. Complete an interview to see your timeline light up. | CTAs: View transcript / Download JSON / Delete",
+      "cleaned": "Hero: Recording vault | Supporting: Replay transcripts, download evidence, or prune stale runs. | Meta: Browse every saved mock interview with sorted stats, jump into transcripts, or pull structured exports. | CTAs: View log / Get JSON / Remove run"
+    },
+    "routes/insights": {
+      "original": "Heading: Pulse | Empty: Run a session to unlock motion charts. | Metrics: Turns / Words / Score",
+      "cleaned": "Hero: Session pulse | Supporting: Surface streaks, word count swings, and score lifts. | Meta: Visualize every run with sparklines so trends are obvious pre-interview. | CTAs: View charts / Export data"
+    },
+    "routes/library": {
+      "original": "Heading: Storage status | Subheading: Local-first | Body: Sessions are stored in-browser. Connect your backend later to sync using the REST adapter without changing this workspace.",
+      "cleaned": "Hero: Library sync status | Supporting: Keep runs local today and flip on backend sync when approvals land. | Meta: Every transcript stays in secure local storage until you attach the REST adapter, so migration can happen with zero UI churn. | CTAs: Connect API / Stay local"
+    }
+  },
+  "unused_files": {
+    "safe_remove": [
+      {
+        "path": "-",
+        "reason": "Legacy InterviewConfigPanel prototype; unused anywhere; removing lowers TS noise.",
+        "risk": "none"
+      },
+      {
+        "path": "temp.txt",
+        "reason": "Old InterviewRoom draft not imported; duplicates real component.",
+        "risk": "none"
+      },
+      {
+        "path": "examples/session_example_1.json",
+        "reason": "Static export sample never referenced by code; docs use README instructions instead.",
+        "risk": "low"
+      },
+      {
+        "path": "examples/session_example_2.json",
+        "reason": "Same as above; sample data only.",
+        "risk": "low"
+      },
+      {
+        "path": "project_tree.txt",
+        "reason": "One-off tree dump with garbled characters; no build/reference links.",
+        "risk": "low"
+      }
+    ],
+    "verify": [
+      {
+        "path": "server/openapi.yaml",
+        "reason": "API contract file may feed other tooling; confirm with backend before deleting.",
+        "risk": "could break docs"
+      },
+      {
+        "path": "server/index.ts",
+        "reason": "Source of the Express mock; required if TS edits are needed even though index.mjs runs in npm script.",
+        "risk": "blocks future API updates"
+      },
+      {
+        "path": "src/structure.txt",
+        "reason": "Only mirrors folder layout but may be referenced in onboarding docs.",
+        "risk": "minor"
+      }
+    ]
+  },
+  "priority_fixes": {
+    "P0": [
+      {
+        "issue": "AppShell passes `visibleSections`/`header` props into InterviewConfigPanel but the component interface ignores them, causing TypeScript errors and preventing dynamic panel layouts.",
+        "impact": "Build blockers + duplicated config UI.",
+        "fix_snippet": "```tsx\ninterface InterviewConfigPanelProps {\n  visibleSections?: Array<'role' | 'seniority' | 'language' | 'engine'>;\n  header?: { eyebrow?: string; title?: string; description?: string };\n}\n```"
+      },
+      {
+        "issue": "Sidebar nav + DNA buttons act as toggles but expose no `aria-pressed`/`aria-current`, so screen readers cannot tell which mode is active.",
+        "impact": "WCAG 4.1.2 failure; keyboard users lose state.",
+        "fix_snippet": "```tsx\n<button\n  role=\"tab\"\n  aria-pressed={active}\n  aria-current={active ? 'page' : undefined}\n>Dashboard</button>\n```"
+      },
+      {
+        "issue": "SessionViewerModal lacks `role=\"dialog\"`, `aria-modal`, escape handling, and focus trap, so focus can fall behind the overlay.",
+        "impact": "Screen reader lockout + keyboard trap.",
+        "fix_snippet": "```tsx\n<div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"session-heading\" ref={dialogRef}>\n  <FocusTrap>{/* modal content */}</FocusTrap>\n</div>\n```"
+      },
+      {
+        "issue": "TranscriptList renders plain divs without `role=\"log\"` or `aria-live`, so assistive tech never hears new utterances.",
+        "impact": "Live captioning inaccessible.",
+        "fix_snippet": "```tsx\n<section role=\"log\" aria-live=\"polite\" aria-relevant=\"additions\">\n  {/* utterances */}\n</section>\n```"
+      },
+      {
+        "issue": "MicGateIndicator returns `null` when the mic is idle, giving no persistent status text; SR users cannot tell whether capture is paused.",
+        "impact": "No alternative cue for mic state.",
+        "fix_snippet": "```tsx\nreturn (\n  <div role=\"status\" aria-live=\"polite\">\n    <span aria-hidden=\"true\" />\n    <span className=\"sr-only\">{isListening ? 'Listening' : 'Mic idle'}</span>\n  </div>\n);\n```"
+      }
+    ],
+    "P1": [
+      {
+        "issue": "Noise overlay + radial gradients render on every route and never respect `prefers-reduced-motion` beyond base CSS, inflating paint work.",
+        "impact": "Unnecessary GPU load on low-power devices.",
+        "fix_snippet": "```css\n@media (prefers-reduced-motion: reduce) {\n  .noise-overlay { display: none; }\n}\n```"
+      },
+      {
+        "issue": "HistoryPanel delete button relies on `confirm()` without describing the session being removed.",
+        "impact": "Keyboard users cannot confirm context.",
+        "fix_snippet": "```tsx\n<button aria-describedby=\"session-123\" onClick={() => openConfirm(s)}>Delete</button>\n```"
+      },
+      {
+        "issue": "AnalyticsPanel sparkline SVG lacks `aria-label` or descriptive text.",
+        "impact": "Charts invisible to AT.",
+        "fix_snippet": "```tsx\n<Sparkline aria-label=\"Turn count over time\" role=\"img\" />\n```"
+      }
+    ],
+    "P2": [
+      {
+        "issue": "All interview hooks load eagerly; `RestLLMAdapter` and MSW support could be code-split so the default local adapter shaves bundle size.",
+        "impact": "Perf headroom; not blocking.",
+        "fix_snippet": "```tsx\nconst Adapter = lazy(() => import('./adapters/RestLLMAdapter'));\n```"
+      },
+      {
+        "issue": "Index.css ships critical background styles + global font but nothing inlined into `<head>` yet.",
+        "impact": "Flash of unstyled gradient on cold loads.",
+        "fix_snippet": "```html\n<style id=\"critical-css\">body{background:#05010a;color:#f8fbff;}</style>\n```"
+      },
+      {
+        "issue": "Footer contact links do not expose analytics hooks or downloadable contact card.",
+        "impact": "Minor attribution gaps.",
+        "fix_snippet": "```tsx\n<a rel=\"me noopener\" data-analytics=\"contact-link\">GitHub</a>\n```"
+      }
+    ]
+  },
+  "migration_plan": [
+    {
+      "step": "Extend InterviewConfigPanel + AppShell to honor dynamic Session DNA layouts and remove duplicate props.",
+      "estimate_days": 1,
+      "description": "Refactor props, extract shared Section components, wire visibleSections/header data.",
+      "acceptance_criteria": "tsc passes; DNA renders once; toggles announce active state.",
+      "tests": "Vitest snapshot for InterviewConfigPanel + RTL aria assertions."
+    },
+    {
+      "step": "Modularize Ops Deck chrome (Header, LeftNav, KPICard) using new design-system skeletons.",
+      "estimate_days": 1.5,
+      "description": "Create src components, import into AppShell, remove inline markup.",
+      "acceptance_criteria": "No visual regressions; layout matches design tokens.",
+      "tests": "Storybook/Chromatic diff or Percy screenshot; lint/no-unused-vars."
+    },
+    {
+      "step": "Instrument Playback Log + Session viewer with dialog semantics and focus management.",
+      "estimate_days": 1,
+      "description": "Add focus trap hook, aria attributes, keyboard shortcuts, plus tests.",
+      "acceptance_criteria": "Tab order stays inside modal; Esc closes; jest-axe passes.",
+      "tests": "RTL + @testing-library/user-event scenario."
+    },
+    {
+      "step": "Ship critical CSS + lazy adapter loading for faster first render.",
+      "estimate_days": 0.75,
+      "description": "Inline hero background + noise toggle; split heavy adapters/hooks.",
+      "acceptance_criteria": "Lighthouse First Contentful Paint improves (>5%).",
+      "tests": "Vitest for lazy imports; manual Lighthouse run."
+    },
+    {
+      "step": "Implement content + localization sweep using `_proposed_content_edits`.",
+      "estimate_days": 0.5,
+      "description": "Apply cleaned copy, wire meta tags, verify hero char counts.",
+      "acceptance_criteria": "Hero text <=60 chars, meta 120-155, CTAs <=3 words.",
+      "tests": "Unit tests for content helpers + manual review."
+    }
+  ],
+  "deliverables": [
+    {
+      "path": "design-redesign-report.json",
+      "description": "Single source of truth for product summary, routes, components, fixes, migration plan."
+    },
+    {
+      "path": "design-system/tokens.json",
+      "description": "Color/typography/spacing tokens derived from screenshot."
+    },
+    {
+      "path": "design-system/README.md",
+      "description": "Usage guide linking screenshot motifs to tokens."
+    },
+    {
+      "path": "design-system/components/*.tsx",
+      "description": "React + Tailwind-ready skeletons for Header, LeftNav, KPICard, SessionDNA, PillGroup, PrimaryButton, InterviewStudio, TranscriptPanel, PlaybackLog, FooterAuthorCard."
+    },
+    {
+      "path": "design-system/mockups/*.html",
+      "description": "Desktop/tablet/mobile static mocks for reference."
+    },
+    {
+      "path": "_proposed_content_edits/*",
+      "description": "Original vs cleaned copy per conceptual route."
+    },
+    {
+      "path": "PR_redesign_description.md",
+      "description": "Ready-to-use PR summary with tests + rollback."
+    },
+    {
+      "path": "design-redesign-commit-log.md",
+      "description": "Running log of staged commits + diff notes (populated after commits)."
+    }
+  ]
+}
