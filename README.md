@@ -4,6 +4,8 @@
 
 Live demo: https://salama-malek.github.io/IntervueAI/
 
+![Screenshot of the app](docs/screenshot.jpg)
+
 Voice-first mock interview platform for practicing technical interviews in the browser.
 
 ## Overview
