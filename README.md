@@ -1,5 +1,9 @@
 # IntervueAI
 
+![Deploy](https://github.com/Salama-Malek/IntervueAI/actions/workflows/deploy.yml/badge.svg)
+
+Live demo: https://salama-malek.github.io/IntervueAI/
+
 Voice-first mock interview platform for practicing technical interviews in the browser.
 
 ## Overview

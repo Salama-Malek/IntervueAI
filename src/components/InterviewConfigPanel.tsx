@@ -15,6 +15,12 @@ interface InterviewConfigPanelProps {
   adapter: AdapterKind;
   onAdapterChange: (adapter: AdapterKind) => void;
   disabled: boolean;
+  visibleSections?: string[];
+  header?: {
+    eyebrow: string;
+    title: string;
+    description: string;
+  };
 }
 
 const ROLES: Role[] = [

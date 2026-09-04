@@ -85,7 +85,7 @@ class MockAudioContext {
   }
 }
 
-const testGlobals = globalThis as typeof globalThis & {
+const testGlobals = globalThis as unknown as {
   SpeechRecognition: typeof MockSpeechRecognition;
   webkitSpeechRecognition: typeof MockSpeechRecognition;
   speechSynthesis: MockSpeechSynthesis;
