@@ -1,281 +1,105 @@
 # IntervueAI
 
-**Voice-First Mock Interview Platform** - A frontend-only MVP for conducting mock technical interviews using voice interaction.
+Voice-first mock interview platform for practicing technical interviews in the browser.
+
+## Overview
+
+IntervueAI runs a mock interview entirely through speech: it asks role- and seniority-specific questions, listens to your spoken answer via the Web Speech API, scores it heuristically (length, structure, and role-relevant keywords), and speaks back feedback before moving to the next question. It works fully client-side out of the box (no backend required), and can optionally be pointed at a REST API for session persistence and server-side scoring. Sessions are recorded as a live transcript, saved to history, and exportable as JSON.
 
 ## Features
 
-- **Voice-First Interaction**: Real-time speech-to-text and text-to-speech using Web Speech API
-- **Multiple Roles**: Frontend, Backend, Full-Stack, Data Engineer, Product Manager, UX
-- **Seniority Levels**: Junior, Mid, Senior with tailored questions
-- **Heuristic Scoring**: Automatic evaluation based on length, structure, and technical content
-- **Live Transcript**: Real-time diarized transcript with interim results
-- **Cinematic Studio UI**: Gradient-rich, glassmorphic workspace with hero stats, holographic controls, analytics, and history panels
-- **Session Export**: Download interview sessions as JSON
-- **Internationalization**: Support for multiple languages with auto RTL layout
-- **Accessibility**: Keyboard navigation, ARIA labels, reduced motion support
+- Voice-first interaction using the Web Speech API for speech-to-text and text-to-speech
+- Six interview tracks (Frontend, Backend, Full-Stack, Data Engineer, Product Manager, UX) across Junior/Mid/Senior levels
+- Heuristic answer scoring based on response length, structure, and role keywords
+- Live, diarized transcript with interim speech results
+- Session history with detail view, JSON export, and delete
+- Pluggable adapters: local heuristic engine or REST backend, switchable via settings or env vars
+- Optional Mock Service Worker (MSW) layer to exercise the REST adapter without a live server
+- Internationalization with automatic RTL layout (English, Arabic)
+- Keyboard navigation, ARIA labels, and reduced-motion support
 
-## Tech Stack
+## Tech stack
 
-- **React 18** + **TypeScript**
-- **Vite** for fast development and optimized builds
-- **Tailwind CSS** for styling
-- **Web Speech API** for STT/TTS
-- **Web Audio API** for RMS microphone activity detection
-- **Vitest** + **React Testing Library** for testing
-- **ESLint** + **Prettier** for code quality
+- React 18 + TypeScript, built with Vite
+- Tailwind CSS
+- Web Speech API (STT/TTS) and Web Audio API (microphone RMS detection)
+- TanStack Query for data fetching
+- Express backend (`server/`) exposing a minimal REST API, documented via `server/openapi.yaml`
+- MSW for mocking the REST adapter in the browser
+- Vitest + React Testing Library for tests; ESLint + Prettier for linting/formatting
 
-## Prerequisites
+## Getting started
 
-- **Node.js** 18+ and **pnpm** (or npm/yarn)
-- **HTTPS** connection (required for microphone access)
-- **Chrome** or **Edge** browser (for best Web Speech API support)
+### Prerequisites
 
-## Installation
+- Node.js 18+
+- Chrome or Edge (best Web Speech API support)
+- HTTPS in production (required for microphone access)
+
+### Install
 
 ```bash
-# Clone the repository
 git clone <repository-url>
-cd intervueai
-
-# Install dependencies
-pnpm install
+cd IntervueAI
+npm install
 ```
 
-## Development
+### Environment variables
 
-```bash
-# Start development server
-pnpm dev
-
-# The app will be available at http://localhost:5173
-# For microphone access, you may need to use HTTPS in production
-```
-
-### Running with REST backend locally
-
-```bash
-# Start API server (port 8787)
-npm run server:dev
-
-# Or run both API and Vite together
-npm run dev:full
-
-# Configure the frontend to use the REST adapter
-# copy .env.example to .env.local and set:
-#   VITE_ADAPTER=rest
-#   VITE_API_BASE_URL=http://localhost:8787
-```
-
-## Build
-
-```bash
-# Type check
-pnpm typecheck
-
-# Lint
-pnpm lint
-
-# Format code
-pnpm format
-
-# Run tests
-pnpm test
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-```
-
-## Deployment
-
-The application is a static site and can be deployed to:
-
-- **Vercel**: `vercel deploy`
-- **Netlify**: Drag and drop the `dist` folder
-- **GitHub Pages**: Push the `dist` folder to `gh-pages` branch
-
-**Important**: Ensure HTTPS is enabled for microphone access.
-
-### Adapter Selection (Local vs REST)
-
-- Default adapter is `local` (heuristic, no backend required).
-- To use a backend, set environment variables (copy `.env.example` to `.env.local`):
+Copy `.env.example` to `.env.local` and adjust as needed:
 
 ```
-VITE_ADAPTER=rest
+VITE_ADAPTER=local            # "local" (no backend) or "rest"
 VITE_API_BASE_URL=http://localhost:8787
+VITE_USE_MSW=false            # true to mock the REST adapter in-browser
 ```
 
-- You can also switch adapters from the "Adapter" dropdown in the settings panel.
-
-### Analytics
-
-- The left panel shows simple trends (turns, words, and final score if available) across saved sessions.
-- Final score is inferred from the last AI message when it contains a pattern like `Score: 78/100`.
-
-### Mocking the Backend (MSW)
-
-- Frontend-only development can run entirely against the `RestLLMAdapter` by enabling MSW:
-
-```
-VITE_ADAPTER=rest
-VITE_USE_MSW=true
-VITE_API_BASE_URL=/api
-```
-
-- When `VITE_USE_MSW=true`, the app boots a Mock Service Worker that implements the `/sessions/*` endpoints using the local question bank and heuristic scoring. Disable it (set to `false`) to hit a real backend.
-
-### API Contract
-
-- A minimal OpenAPI spec is available at `server/openapi.yaml` describing the REST adapter endpoints.
-
-## Usage
-
-1. **Configure Interview**: Select role, seniority level, and language
-2. **Start Interview**: Click "Start Interview" and grant microphone permissions
-3. **Speak Naturally**: Answer questions verbally; the AI will respond with feedback and next question
-4. **Review Transcript**: View real-time transcript with speaker labels
-5. **Stop & Export**: Click "Stop Interview" to end and view summary; export session as JSON
-
-### History
-
-- Sessions are automatically saved locally on stop and listed in the History panel.
-- From History you can view details, download JSON, or delete entries.
-
-### Keyboard Shortcuts
-
-- **Space**: Toggle listening (when interview is active)
-
-## Project Structure
-
-```
-intervueai/
-├── src/
-│   ├── adapters/
-│   │   ├── AdapterTypes.ts          # Adapter interface
-│   │   └── LocalWebSpeechAdapter.ts # Local scripted adapter
-│   ├── components/
-│   │   ├── AppShell.tsx             # Main app container
-│   │   ├── InterviewConfigPanel.tsx # Configuration panel
-│   │   ├── InterviewRoom.tsx        # Interview session manager
-│   │   ├── TranscriptList.tsx       # Transcript display
-│   │   ├── MicGateIndicator.tsx     # Mic activity indicator
-│   │   ├── ControlsBar.tsx          # Control buttons
-│   │   └── ReportPanel.tsx          # Session summary
-│   ├── hooks/
-│   │   ├── useRmsGate.ts            # RMS mic activity detection
-│   │   ├── useSpeechStt.ts          # Speech-to-text hook
-│   │   └── useSpeechTts.ts          # Text-to-speech hook
-│   ├── lib/
-│   │   ├── questions.ts             # Question bank (10-12 per role/seniority)
-│   │   ├── scoring.ts               # Heuristic scoring logic
-│   │   ├── summarize.ts             # Session summary calculation
-│   │   ├── i18n.ts                  # Internationalization utilities
-│   │   └── ids.ts                   # ID generation
-│   ├── App.tsx                      # Root component
-│   ├── main.tsx                     # Entry point
-│   ├── index.css                    # Global styles
-│   └── setupTests.ts                # Test setup
-├── examples/                        # Example exported sessions
-├── .github/workflows/               # CI/CD workflows
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-├── tailwind.config.js
-└── README.md
-```
-
-## Testing
+### Run (local adapter, no backend)
 
 ```bash
-# Run all tests
-pnpm test
-
-# Run tests with UI
-pnpm test:ui
-
-# Run tests with coverage
-pnpm test:coverage
+npm run dev
 ```
 
-### Test Coverage
+App runs at `http://localhost:5173`.
 
-- **Unit Tests**: `scoring.ts`, `summarize.ts`, `questions.ts`
-- **Component Tests**: `TranscriptList.tsx`
-- **Integration**: Adapter interaction with components
+### Run with the REST backend
 
-## Performance
+```bash
+npm run server:dev     # starts the Express API on port 8787
+npm run dev:full       # runs the API and Vite dev server together
+```
 
-- **Bundle Size**: < 90 KB gzipped (app + vendor, excluding Tailwind CSS)
-- **Idle CPU**: < 5% with microphone off
-- **First Interaction**: < 100 ms
+Set `VITE_ADAPTER=rest` and `VITE_API_BASE_URL=http://localhost:8787` in `.env.local`, or switch adapters from the Adapter dropdown in the app's settings panel.
 
-## Browser Support
+### Scripts
 
-- **Chrome/Edge**: Full support (recommended)
-- **Firefox**: Limited Web Speech API support
-- **Safari**: Limited Web Speech API support
+```bash
+npm run typecheck      # TypeScript type checking
+npm run lint           # ESLint
+npm run format         # Prettier
+npm run test           # Vitest
+npm run test:coverage  # Vitest with coverage
+npm run build          # Production build
+npm run preview        # Preview the production build
+```
 
-**Note**: The app gracefully degrades with a banner when Web Speech API is unavailable.
+## Project structure
 
-## Accessibility
-
-- Keyboard-navigable controls
-- ARIA labels for screen readers
-- Respects `prefers-reduced-motion`
-- RTL layout support for Arabic, Farsi, Urdu
-
-## Internationalization
-
-Currently supported languages:
-
-- **English (US)**: `en-US`
-- **Arabic (Egypt)**: `ar-EG`
-
-The app automatically switches to RTL layout for Arabic-like languages.
-
-## Future Enhancements
-
-- **RestLLMAdapter**: Integration with external LLM APIs
-- **WebRTCAdapter**: Real-time streaming with backend services
-- **More Languages**: Expand language support
-- **Advanced Scoring**: Machine learning-based evaluation
-- **Video Recording**: Optional video capture during interviews
+```
+IntervueAI/
+├── src/
+│   ├── adapters/         # Local (heuristic) and REST interview adapters
+│   ├── components/       # UI: AppShell, InterviewRoom, TranscriptList, HistoryPanel, ReportPanel, ...
+│   ├── context/          # Auth context/state
+│   ├── hooks/            # useSpeechStt, useSpeechTts, useRmsGate, useAuth, useSessionsData
+│   ├── lib/               # Question bank, scoring, summarization, i18n, API client
+│   ├── mocks/             # MSW handlers for the REST adapter
+│   └── App.tsx, main.tsx
+├── server/                # Express REST API + OpenAPI spec
+├── examples/              # Example exported sessions
+└── package.json
+```
 
 ## License
 
 MIT
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
-
-## Verification Checklist
-
-✅ Chrome over HTTPS: Start → speak → AI TTS reply → transcript updates → Stop → export JSON  
-✅ Language switch to ar-EG flips layout to RTL  
-✅ STT/TTS use selected locale  
-✅ App degrades with clear banner if STT/TTS unavailable  
-✅ Exported JSON parses back with the same shape  
-✅ Build size under 90 KB gzipped (app + vendor, excluding Tailwind)  
-✅ Typecheck, lint, and tests pass in CI
-
-## Lighthouse Summary
-
-Run Lighthouse audit on the production build:
-
-```bash
-pnpm build
-pnpm preview
-# Open Chrome DevTools → Lighthouse → Run audit
-```
-
-Expected scores:
-- **Performance**: 90+
-- **Accessibility**: 95+
-- **Best Practices**: 90+
-- **SEO**: 90+
-#   I n t e r v u e A I  
- 
